@@ -90,7 +90,7 @@ func GetDataByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "not found"})
 }
 func main() {
-	jsonData := `{"order_uid": "b563feb7b2b84b6test", "track_number": "WBILMTESTTRACK", "entry": "WBIL", "delivery": { "name": "Test Testov", "phone": "+9720000000", "zip": "2639809", "city": "Kiryat Mozkin", "address": "Ploshad Mira 15", "region": "Kraiot", "email": "test@gmail.com" }, "payment": { "transaction": "b563feb7b2b84b6test", "request_id": "", "currency": "USD", "provider": "wbpay", "amount": 1817, "payment_dt": 1637907727, "bank": "alpha", "delivery_cost": 1500, "goods_total": 317, "custom_fee": 0 }, "items": [ { "chrt_id": 9934930, "track_number": "WBILMTESTTRACK", "price": 453, "rid": "ab4219087a764ae0btest", "name": "Mascaras", "sale": 30, "size": "0", "total_price": 317, "nm_id": 2389212, "brand": "Vivienne Sabo", "status": 202 } ], "locale": "en", "internal_signature": "", "customer_id": "test", "delivery_service": "meest", "shardkey": "9", "sm_id": 99, "date_created": "2021-11-26T06:22:19Z", "oof_shard": "1" }`
+	jsonData := `{"order_uid": "b563feb7b2b84b6test", "track_number": "WBILMTESTTRACK", "entry": "WBIL", "delivery": { "name": "Muhammed Muhtarov", "phone": "+9720000000", "zip": "2639809", "city": "Kiryat Mozkin", "address": "Ploshad Mira 15", "region": "Kraiot", "email": "test@gmail.com" }, "payment": { "transaction": "b563feb7b2b84b6test", "request_id": "", "currency": "USD", "provider": "wbpay", "amount": 1817, "payment_dt": 1637907727, "bank": "alpha", "delivery_cost": 1500, "goods_total": 317, "custom_fee": 0 }, "items": [ { "chrt_id": 9934930, "track_number": "WBILMTESTTRACK", "price": 453, "rid": "ab4219087a764ae0btest", "name": "Mascaras", "sale": 30, "size": "0", "total_price": 317, "nm_id": 2389212, "brand": "Vivienne Sabo", "status": 202 } ], "locale": "en", "internal_signature": "", "customer_id": "test", "delivery_service": "meest", "shardkey": "9", "sm_id": 99, "date_created": "2021-11-26T06:22:19Z", "oof_shard": "1" }`
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
@@ -105,7 +105,7 @@ func main() {
 	}
 	defer nc.Close()
 
-	rows, err := db.Query("SELECT * FROM data")
+	rows, err := db.Query("SELECT * FROM datawbintern")
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
@@ -113,6 +113,7 @@ func main() {
 
 	defer rows.Close()
 
+	// Taking data from db and input to the cache
 	for rows.Next() {
 		var curId string
 		var curJSON string
@@ -136,7 +137,7 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("STARTING")
+	fmt.Println("Start in port :8080")
 	fmt.Printf("DB Data fetch attempt: %v\n", dataCache)
 
 	sc, err := stan.Connect("test-cluster", "client", stan.NatsURL(stan.DefaultNatsURL))
@@ -166,7 +167,7 @@ func main() {
 			if err != nil {
 				return
 			}
-			_, err = db.Exec("insert into data (id, data) values ($1, $2)", curId, m.Data)
+			_, err = db.Exec("insert into datawbintern (id, data) values ($1, $2)", curId, m.Data)
 			if err != nil {
 				return
 			}
