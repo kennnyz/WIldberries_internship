@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 //Human  - родительсякая структура
 
 type Human struct {
@@ -40,5 +42,13 @@ func NewAction(name string, age int, sex string, weight int, height int, job str
 }
 
 func (a *Action) isFat() bool {
+	if !a.isAdult() {
+		return false
+	}
 	return a.weight > 90
+}
+
+func main() {
+	person := NewAction("m", 1, "male", 92, 192, "OZON", true)
+	fmt.Println(person.isFat())
 }
