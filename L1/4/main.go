@@ -17,6 +17,7 @@ func main() {
 
 	jobs := make(chan int, 100)
 	results := make(chan int, 100)
+	defer close(results)
 
 	for i := 0; i < N; i++ {
 		go worker(jobs, results)
