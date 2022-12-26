@@ -1,7 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"io"
+	"os"
+	"strconv"
 )
 
 //Реализовать постоянную запись данных в канал (главный поток).
@@ -26,7 +28,7 @@ func main() {
 	close(jobs)
 
 	for i := 0; i < 100; i++ {
-		fmt.Println(i, ": ", <-results)
+		io.WriteString(os.Stdout, strconv.Itoa(i)+": "+strconv.Itoa(<-results)+"\n")
 	}
 }
 
