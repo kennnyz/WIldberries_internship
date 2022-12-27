@@ -23,7 +23,7 @@ func fib(c, quit chan int) {
 	}
 }
 
-func main() {
+/*func main() {
 	c := make(chan int)
 	quit := make(chan int)
 	go func() {
@@ -33,8 +33,7 @@ func main() {
 		quit <- 0
 	}()
 	fib(c, quit)
-}
-
+}*/
 //---------------------------------------------------------------------------------------------------------------------//
 
 // Спопоб №2. Можно остановить горутину с помощью Context
@@ -46,7 +45,6 @@ func main() {
 
 	// Start the doSomething function
 	go doSomething(ctxTimeout, ch, 100)
-	time.Sleep(1 * time.Second)
 
 	for {
 		select {
@@ -71,8 +69,8 @@ func doSomething(ctx context.Context, ch chan int, n int) {
 		default:
 			ch <- fibonaci(i)
 		case <-ctx.Done():
-			fmt.Println("Canceled by timeout")
 			return
 		}
 	}
+	close(ch)
 }
