@@ -1,9 +1,9 @@
 package main
 
 import (
-	"io"
+	"fmt"
 	"os"
-	"strconv"
+	"os/signal"
 )
 
 //Реализовать постоянную запись данных в канал (главный поток).
@@ -13,30 +13,29 @@ import (
 //Программа должна завершаться по нажатию Ctrl+C.
 
 func main() {
-	N := 2
-
-	jobs := make(chan int, 100)
-	results := make(chan int, 100)
-	defer close(results)
+	N := 3
+	signalChannel := make(chan os.Signal, 1)
+	signal.Notify(signalChannel, os.Interrupt)
+	go func() {
+		for sig := range signalChannel {
+			fmt.Printf("%d workers were killed when captured '%v' signal caused by user\n", N, sig)
+			os.Exit(0)
+		}
+	}()
+	jobs := make(chan int, N)
 
 	for i := 0; i < N; i++ {
-		go worker(jobs, results)
+		go worker(jobs)
 	}
 
 	for i := 0; i < 100; i++ {
 		jobs <- i
 	}
-	close(jobs)
-
-	for i := 0; i < 100; i++ {
-		io.WriteString(os.Stdout, strconv.Itoa(i)+": "+strconv.Itoa(<-results)+"\n")
-	}
 }
 
-// Только получаем с jobs chanel и только отправляем в results chanel
-func worker(jobs <-chan int, results chan<- int) {
+func worker(jobs <-chan int) {
 	for n := range jobs {
-		results <- fib(n)
+		fmt.Println(fib(n))
 	}
 }
 
