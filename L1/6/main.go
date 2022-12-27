@@ -6,7 +6,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 )
@@ -38,9 +37,25 @@ func main() {
 //---------------------------------------------------------------------------------------------------------------------//
 
 // Спопоб №2. Можно остановить горутину с помощью Context
-func longRunningProcess(ctx context.Context) error {
-	time.Sleep(100 * time.Millisecond)
-	return errors.New("failed: Process took too long")
+// Если время вычисление числа фибоначи займет больше чем N секунд до горутина остановится
+func main() {
+	ch := make(chan int, 1)
+	ctxTimeout, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Start the doSomething function
+	go doSomething(ctxTimeout, ch, 100)
+	time.Sleep(1 * time.Second)
+
+	for {
+		select {
+		case <-ch:
+			fmt.Println("Read from ch ", <-ch)
+		case <-time.After(2 * time.Second):
+			fmt.Println("Timed out. Took over than 2 second")
+			return
+		}
+	}
 }
 func fibonaci(n int) int {
 	if n <= 1 {
@@ -48,26 +63,9 @@ func fibonaci(n int) int {
 	}
 	return fibonaci(n-1) + fibonaci(n-2)
 }
-func worker(ctx context.Context, n int) {
-	fibonaci(n)
-	select {
-	case <-time.After(500 * time.Millisecond):
-		fmt.Println("")
-	case <-ctx.Done():
-		fmt.Println("Took too long")
+
+func doSomething(ctx context.Context, ch chan int, n int) {
+	for i := 0; i < n; i++ {
+		ch <- fibonaci(i)
 	}
-
-}
-
-func main() {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-
-	go func() {
-		err := longRunningProcess(ctx)
-		if err != nil {
-			cancel()
-		}
-	}()
-	worker(ctx, 100)
 }

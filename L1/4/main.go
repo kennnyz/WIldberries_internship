@@ -33,6 +33,7 @@ func main() {
 	for i := 0; i < 100; i++ {
 		jobs <- i
 	}
+
 }
 
 func worker(jobs <-chan int) {
