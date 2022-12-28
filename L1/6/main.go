@@ -24,7 +24,7 @@ func fib(c, quit chan int) {
 	}
 }
 
-func main() {
+/*func main() {
 	c := make(chan int)
 	quit := make(chan int)
 	go func() {
@@ -34,8 +34,7 @@ func main() {
 		quit <- 0
 	}()
 	fib(c, quit)
-}
-
+}*/
 //---------------------------------------------------------------------------------------------------------------------//
 
 // Спопоб №2. Можно остановить горутину с помощью Context
@@ -60,7 +59,7 @@ func operation2(ctx context.Context) {
 		default:
 			fmt.Println(i, ": ", fibonaci(i))
 		case <-ctx.Done():
-			fmt.Println("Took over than 2 second")
+			fmt.Println("Took time over than 2 second")
 			return
 		}
 	}
