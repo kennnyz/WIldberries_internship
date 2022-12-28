@@ -6,6 +6,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -23,7 +24,7 @@ func fib(c, quit chan int) {
 	}
 }
 
-func main() {
+/*func main() {
 	c := make(chan int)
 	quit := make(chan int)
 	go func() {
@@ -33,45 +34,53 @@ func main() {
 		quit <- 0
 	}()
 	fib(c, quit)
-}
-
+}*/
 //---------------------------------------------------------------------------------------------------------------------//
 
 // Спопоб №2. Можно остановить горутину с помощью Context
 // Если время вычисление числа фибоначи займет больше чем N секунд до горутина остановится
-func main() {
-	ch := make(chan int, 1)
-	ctxTimeout, cancel := context.WithCancel(context.Background())
-	defer cancel()
 
-	// Start the doSomething function
-	go doSomething(ctxTimeout, ch, 100)
-
-	for {
-		select {
-		case <-ch:
-			fmt.Println("Read from ch ", <-ch)
-		case <-time.After(2 * time.Second):
-			fmt.Println("Timed out. Took over than 2 second")
-			return
-		}
-	}
-}
 func fibonaci(n int) int {
 	if n <= 1 {
 		return n
 	}
 	return fibonaci(n-1) + fibonaci(n-2)
 }
+func operation1(ctx context.Context) error {
+	// Let's assume that this operation failed for some reason
+	// We use time.Sleep to simulate a resource intensive operation
+	time.Sleep(2 * time.Second)
+	return errors.New("failed")
+}
 
-func doSomething(ctx context.Context, ch chan int, n int) {
-	for i := 0; i < n; i++ {
+func operation2(ctx context.Context) {
+	for i := 0; i < 100; i++ {
 		select {
 		default:
-			ch <- fibonaci(i)
+			fmt.Println(i, ": ", fibonaci(i))
 		case <-ctx.Done():
+			fmt.Println("Took over than 2 second")
 			return
 		}
 	}
-	close(ch)
+
+}
+
+func main() {
+	// Create a new context
+	ctx := context.Background()
+	// Create a new context, with its cancellation function
+	// from the original context
+	ctx, cancel := context.WithCancel(ctx)
+	// Run two operations: one in a different go routine
+	go func() {
+		err := operation1(ctx)
+		// Если это операция вернет ошибку
+		// то закроются все операцию использующие данный контекст
+		if err != nil {
+			cancel()
+		}
+	}()
+	// Run operation2 with the same context we use for operation1
+	operation2(ctx)
 }
