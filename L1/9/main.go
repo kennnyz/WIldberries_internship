@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"io"
+	"os"
+	"strconv"
+)
 
 // Разработать конвейер чисел. Даны два канала: в первый пишутся числа (x) из массива,
 // во второй — результат операции x*2, после чего данные из второго канала должны выводиться в stdout.
@@ -18,7 +22,7 @@ func main() {
 		if !open {
 			break
 		}
-		fmt.Println(<-c2)
+		io.WriteString(os.Stdout, strconv.Itoa(<-c2))
 	}
 }
 
