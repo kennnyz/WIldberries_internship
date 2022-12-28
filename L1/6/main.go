@@ -24,7 +24,7 @@ func fib(c, quit chan int) {
 	}
 }
 
-/*func main() {
+func main() {
 	c := make(chan int)
 	quit := make(chan int)
 	go func() {
@@ -34,7 +34,8 @@ func fib(c, quit chan int) {
 		quit <- 0
 	}()
 	fib(c, quit)
-}*/
+}
+
 //---------------------------------------------------------------------------------------------------------------------//
 
 // Спопоб №2. Можно остановить горутину с помощью Context
