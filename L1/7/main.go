@@ -17,8 +17,9 @@ func main() {
 
 	go readLoop(m, mux)
 
-	block := make(chan struct{})
-	<-block
+	//block := make(chan struct{})
+	//<-block
+	time.Sleep(1 * time.Second)
 }
 
 func writeLoop(m map[int]int, mux *sync.Mutex) {
@@ -33,10 +34,9 @@ func writeLoop(m map[int]int, mux *sync.Mutex) {
 func readLoop(m map[int]int, mux *sync.Mutex) {
 	mux.Lock()
 	for k, v := range m {
-		time.Sleep(500 * time.Millisecond)
+		//time.Sleep(500 * time.Millisecond)
 		fmt.Println(k, "-", v)
 	}
 	mux.Unlock()
 	fmt.Println("Data has been successfully recorded")
-	return
 }
