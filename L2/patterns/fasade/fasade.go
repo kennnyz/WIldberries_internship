@@ -18,9 +18,9 @@ func NewPC() *PC {
 	}
 }
 
-// Todo возвращает что нужно чтобы играть в компьютер
+// Start возвращает то, что нужно чтобы играть в компьютер
 
-func (p *PC) Todo() string {
+func (p *PC) Start() string {
 	result := []string{
 		p.systemBlock.build(),
 		p.monitor.turnOn(),
