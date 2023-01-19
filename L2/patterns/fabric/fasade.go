@@ -1,4 +1,4 @@
-package fasade
+package fabric
 
 import "strings"
 
