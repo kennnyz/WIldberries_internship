@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -11,38 +13,44 @@ import (
 //"45" => "" (некорректная строка)
 //"" => ""
 
-func Unpack(s string) string {
-	if s == "" {
-		return ""
+func UnpackingString(s string) (string, error) {
+	if len(s) == 0 {
+		return "", nil
 	}
-	var result strings.Builder
-	var last rune
-	var count int
-	for _, r := range s {
-		if unicode.IsDigit(r) {
-			if last == 0 {
-				return ""
+	str := []rune(s)
+
+	if unicode.IsDigit(str[0]) {
+		return "", errors.New("invalid string")
+	}
+
+	var res strings.Builder
+
+	for i := range str {
+		if unicode.IsDigit(str[i]) {
+			//ищу правую границу числа
+			right := i + 1
+			for right < len(str) && unicode.IsDigit(str[right]) {
+				right++
 			}
-			count = count*10 + int(r-'0')
+			count, err := strconv.Atoi(string(str[i:right]))
+			if err != nil {
+				return "", err
+			}
+			for ; count > 1; count-- {
+				res.WriteString(string(str[i-1]))
+			}
+			i = right - 1
 		} else {
-			if last != 0 {
-				if count == 0 {
-					count = 1
-				}
-				result.WriteString(strings.Repeat(string(last), count))
-				count = 0
+			if str[i] == '\\' {
+				i++
 			}
-			last = r
+			res.WriteString(string(str[i]))
 		}
 	}
-	if count == 0 {
-		count = 1
-	}
-	result.WriteString(strings.Repeat(string(last), count))
-	return result.String()
+	return res.String(), nil
 }
 
 func main() {
-	sad := Unpack("pop2opo6k3t3mnmn6")
+	sad, _ := UnpackingString("qw//5")
 	fmt.Println(sad)
 }
