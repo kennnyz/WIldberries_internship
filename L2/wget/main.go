@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-func downloadWebsite(url string) {
+func downloadWebsite(url string) error {
 	// Send GET request to website
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error: ", err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
 
@@ -21,7 +21,7 @@ func downloadWebsite(url string) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error: ", err)
-		return
+		return err
 	}
 
 	// Create new file with website's domain name
@@ -30,7 +30,7 @@ func downloadWebsite(url string) {
 	file, err := os.Create(filename)
 	if err != nil {
 		fmt.Println("Error: ", err)
-		return
+		return err
 	}
 	defer file.Close()
 
@@ -40,9 +40,13 @@ func downloadWebsite(url string) {
 		fmt.Println("Error: ", err)
 	}
 	fmt.Println("Website downloaded successfully!")
+	return nil
 }
 
 func main() {
 	url := "https://www.youtube.com/"
-	downloadWebsite(url)
+	err := downloadWebsite(url)
+	if err != nil {
+		return
+	}
 }
