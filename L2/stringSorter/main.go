@@ -191,8 +191,11 @@ func sorting(s *sortUtility) []string {
 		}
 		res = append(res, s.strs[i])
 	}
-
 	return res
+}
+
+func Lol() {
+
 }
 func main() {
 	var s sortUtility

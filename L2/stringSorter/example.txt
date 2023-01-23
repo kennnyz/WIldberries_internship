@@ -1,6 +1,13 @@
-one
-one
-one two three
-one two three four
-one two
-one two three four five
+hello   1 World Muhammed 29232      Oct 21 23:40  tmc.int
+hello   1 World Muhammed 29232      Aug 21 23:40  tmc.int
+salam   1 World Uefa 2023      Sep 21 23:40  tmc.int
+asdd   1 Kumir s 1         aug 26 13:46  доки
+vv     1 Georgiy Saha -1        oct 14 23:13  Games
+asd    1 Conor Mcgregor ilya 0         nov 10 08:04 'UFC'
+asd    1 Habib ilya 0         nov 10 08:04 'задания реп'
+  tmc.int
+:12  L2_golang
+asdd   1 Kumir s 1         aug 26 13:46  доки
+vv     1 Georgiy Saha -1        oct 14 23:13  Games
+asd    1 Conor Mcgregor ilya 0         nov 10 08:04 'UFC'
+asd    1 Habib ilya 0         nov 10 08:04 'задания реп'
