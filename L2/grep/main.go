@@ -17,7 +17,6 @@ var v = flag.Bool("v", false, "invert search")
 var F = flag.Bool("F", false, "exact non-pattern match")
 var n = flag.Bool("n", false, "print line index")
 
-// example
 func contain(linestring []string, searchString string) bool {
 	for _, v := range linestring {
 		if searchString == v {
@@ -57,6 +56,10 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 		}
 		j++
 	}
+	if counter == 0 {
+		println("There is no pattern")
+		return nil, nil
+	}
 
 	if A > 0 {
 		for _, value := range ifMeet {
@@ -91,13 +94,15 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 			}
 
 		}
-		if n {
-			for i, v := range ifMeet {
-				fmt.Println(i, "- ", v)
-			}
 
-		}
 		return nil, nil
+	}
+
+	if n {
+		for i, v := range ifMeet {
+			fmt.Println(i, "- ", v+1)
+		}
+
 	}
 	// флаг с - вывести количество встреч паттерна
 	if c {
@@ -110,7 +115,7 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 
 func main() {
 	flag.Parse()
-	_, err := grep("example", "text.txt", *A, *B, *C, *c, *i, *v, *F, *n)
+	_, err := grep("Example", "text.txt", *A, *B, *C, *c, *i, *v, *F, *n)
 	if err != nil {
 		fmt.Println(err)
 	}
