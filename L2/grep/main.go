@@ -36,7 +36,7 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 	scanner := bufio.NewScanner(file)
 
 	// Будет хранится сама строка где содержится паттерн и номер строки
-	ifMeet := make(map[string]int)
+	ifMeet := make(map[int]string)
 	// Количество строк соддержищих паттерн
 	counter := 0
 	// Слайс из всех строк
@@ -54,7 +54,7 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 		lines = append(lines, line)
 		// если у нас в строке встретился паттерн, то добавляем его в список строк, запоминаем мапу и увеличиваем кол-во
 		if strings.Contains(line, pattern) {
-			ifMeet[line] = j
+			ifMeet[j] = line
 			counter++
 		}
 		j++
@@ -65,7 +65,7 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 	}
 
 	if A > 0 {
-		for _, value := range ifMeet {
+		for value, _ := range ifMeet {
 			fmt.Println("Line : ", value+1)
 			if value <= j-A-1 {
 				for k := value; k <= A+value-0; k++ {
@@ -83,7 +83,7 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 		return nil, nil
 	}
 	if B > 0 {
-		for _, value := range ifMeet {
+		for value, _ := range ifMeet {
 			if value > B {
 				for i := value - B; i <= value-0; i++ {
 					fmt.Println("another step -----> ", lines[i])
@@ -102,7 +102,7 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 	}
 
 	if n {
-		for i, v := range ifMeet {
+		for v, i := range ifMeet {
 			fmt.Println(i, "- ", v+1)
 		}
 
@@ -111,6 +111,14 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 	if c {
 		fmt.Printf("{%d} this many times {%s} has meeted in this file \n", counter, pattern)
 		return nil, nil
+	}
+	if v {
+		for i, str := range lines {
+			_, ok := ifMeet[i]
+			if !ok {
+				fmt.Println(str)
+			}
+		}
 	}
 
 	for k := range ifMeet {

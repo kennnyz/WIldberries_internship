@@ -1,5 +1,5 @@
 Google
-Example hello world
+example hello world
 this is some text
 
 google.com
