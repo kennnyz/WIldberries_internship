@@ -47,6 +47,9 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 	for scanner.Scan() {
 		// Получаем каждую отдельную строку
 		line := scanner.Text()
+		if i {
+			line = strings.ToLower(line)
+		}
 		// Добавляем
 		lines = append(lines, line)
 		// если у нас в строке встретился паттерн, то добавляем его в список строк, запоминаем мапу и увеличиваем кол-во
@@ -110,12 +113,16 @@ func grep(pattern string, filename string, A, B, C int, c, i, v, F, n bool) (any
 		return nil, nil
 	}
 
+	for k := range ifMeet {
+		fmt.Println(k)
+	}
+
 	return nil, nil
 }
 
 func main() {
 	flag.Parse()
-	_, err := grep("Example", "text.txt", *A, *B, *C, *c, *i, *v, *F, *n)
+	_, err := grep("example", "text.txt", *A, *B, *C, *c, *i, *v, *F, *n)
 	if err != nil {
 		fmt.Println(err)
 	}
