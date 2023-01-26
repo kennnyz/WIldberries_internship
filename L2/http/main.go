@@ -14,12 +14,12 @@ import (
 //GET /events_for_month
 
 func main() {
-	http.HandleFunc("/create_event", handlers.HandleCreate)
+	http.HandleFunc("/create_event", loggerMiddleware(handlers.HandleCreate))
 	http.HandleFunc("/delete_event", handlers.HandleDelete)
 	http.HandleFunc("/update_event", handlers.HandleUpdate)
-	http.HandleFunc("/events_for_day", handlers.HandleDay)
-	http.HandleFunc("/events_for_week", handlers.HandleWeek)
-	http.HandleFunc("/events_for_month", handlers.HandleMonth)
+	http.HandleFunc("/events_for_day", loggerMiddleware(handlers.HandleDay))
+	http.HandleFunc("/events_for_week", loggerMiddleware(handlers.HandleWeek))
+	http.HandleFunc("/events_for_month", loggerMiddleware(handlers.HandleMonth))
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
