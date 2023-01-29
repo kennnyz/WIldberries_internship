@@ -1,30 +1,11 @@
 package main
 
-import (
-	"bufio"
-	"flag"
-	"fmt"
-	"os"
-	"strings"
-)
+//Утилита cut
 
-func main() {
-	fields := flag.Int("f", 0, " - выбрать поля")
-	delim := flag.String("d", "\t", "использовать другой разделитель")
-	flags := flag.Bool("s", false, "только строки с разделителем ")
-	flag.Parse()
+//Реализовать утилиту аналог консольной команды cut (man cut).
+//Утилита должна принимать строки через STDIN, разбивать по разделителю (TAB) на колонки и выводить запрошенные.
 
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		input, _ := reader.ReadString('\n')
-		if *flags && !strings.Contains(input, *delim) {
-			continue
-		}
-		delimLine := strings.Split(input, *delim)
-		if *fields > 0 {
-			fmt.Printf("You working with f flag and here is your %d field ---> %s", *fields, delimLine[*fields-1])
-		} else if *fields > len(delimLine) {
-			fmt.Println("Field number is more than number of columns")
-		}
-	}
-}
+//Реализовать поддержку утилитой следующих ключей:
+//-f - "fields" - выбрать поля (колонки)
+//-d - "delimiter" - использовать другой разделитель
+//-s - "separated" - только строки с разделителем
