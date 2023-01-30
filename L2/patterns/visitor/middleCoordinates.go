@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// Конкретный посетитель
+
 type MiddleCoordinates struct {
 	x int
 	y int

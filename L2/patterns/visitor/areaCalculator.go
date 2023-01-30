@@ -1,5 +1,7 @@
 package main
 
+// конкретный посетитель
+
 import "fmt"
 
 type AreaCalculator struct {
