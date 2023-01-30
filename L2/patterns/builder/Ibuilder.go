@@ -15,11 +15,11 @@ type IBuilder interface {
 
 func getBuilder(builderType string) IBuilder {
 	if builderType == "normal" {
-		return NewNormalBuilder()
+		return newNormalBuilder()
 	}
 
 	if builderType == "igloo" {
-		return NewStrangeBuilder()
+		return newIglooBuilder()
 	}
 	return nil
 }
